@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Valentine Invite 💗</title>
+  <style>
+    :root{
+      --pink:#ff5aa5;
+      --pink2:#ff89c4;
+      --pink3:#ffd0e6;
+      --ink:#2b0a1a;
+      --card: rgba(255,255,255,.78);
+      --card2: rgba(255,255,255,.58);
+      --shadow: 0 18px 55px rgba(43,10,26,.22);
+      --radius: 22px;
+    }
+
+    *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--ink);
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(255,255,255,.35), transparent 60%),
+        radial-gradient(700px 500px at 85% 25%, rgba(255,255,255,.25), transparent 60%),
+        linear-gradient(180deg, #ffd3ea, #ff8cc6 55%, #ff5aa5);
+      overflow-x:hidden;
+    }
+
+    /* soft floating background layer */
+    .floatLayer{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      overflow:hidden;
+    }
+
+    .floatItem{
+      position:absolute;
+      left: var(--x);
+      top: var(--y);
+      font-size: var(--s);
+      opacity: .85;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,.14));
+      transform: translate(-50%, -50%);
+      animation: drift var(--t) linear infinite;
+    }
+
+    @keyframes drift{
+      0%{ transform: translate(-50%, 120%) rotate(0deg); opacity: .0; }
+      10%{ opacity: .85; }
+      100%{ transform: translate(-50%, -140%) rotate(20deg); opacity: 0; }
+    }
+
+    main{
+      position:relative;
+      z-index:1;
+      width:100%;
+    }
+
+    section{
+      min-height: 100svh;
+      padding: 18px 16px 28px;
+      display:grid;
+      align-content:center;
+      justify-items:center;
+      gap: 14px;
+    }
+
+    .card{
+      width: min(780px, 100%);
+      background: var(--card);
+      border: 1px solid rgba(43,10,26,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px 16px;
+      backdrop-filter: blur(10px);
+    }
+
+    .titleBig{
+      font-size: clamp(36px, 8vw, 62px);
+      line-height: 0.98;
+      margin: 4px 0 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .subBig{
+      font-size: clamp(16px, 3.8vw, 20px);
+      line-height: 1.45;
+      margin: 0;
+      opacity: .92;
+      white-space: pre-line;
+    }
+
+    .scrollHint{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 8px;
+      margin-top: 10px;
+      user-select:none;
+    }
+
+    .finger{
+      font-size: 42px;
+      animation: bounce 1s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes bounce{
+      0%, 100%{ transform: translateY(0); }
+      50%{ transform: translateY(-10px); }
+    }
+
+    .scrollText{
+      font-weight: 800;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,.65);
+      border: 1px solid rgba(43,10,26,.10);
+      padding: 8px 12px;
+      border-radius: 999px;
+      box-shadow: 0 10px 26px rgba(43,10,26,.12);
+    }
+
+    .sectionTitle{
+      font-size: clamp(26px, 6vw, 38px);
+      margin: 0;
+      letter-spacing: -0.02em;
+      text-align:center;
+    }
+
+    .muted{
+      margin: 6px 0 0;
+      text-align:center;
+      opacity:.85;
+      line-height:1.35;
+    }
+
+    /* Gallery */
+    .galleryWrap{ display:grid; gap: 14px; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .slot{
+      position:relative;
+      aspect-ratio: 1 / 1;
+      border-radius: 18px;
+      overflow:hidden;
+      background: rgba(255,255,255,.65);
+      border: 1px solid rgba(43,10,26,.10);
+      box-shadow: 0 10px 24px rgba(43,10,26,.10);
+    }
+
+    .slotMedia{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+    }
+
+    .slotOverlay{
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      padding: 10px;
+      background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,90,165,.18));
+      font-weight: 800;
+      text-align:center;
+      color: rgba(43,10,26,.85);
+    }
+
+    .slotOverlay small{ display:block; font-weight:700; opacity:.85; margin-top: 6px; }
+
+    .slot input[type=file]{
+      position:absolute;
+      inset:0;
+      opacity:0;
+      cursor:pointer;
+    }
+
+    /* Ask-out buttons */
+    .btnRow{ display:flex; gap: 10px; flex-wrap:wrap; justify-content:center; margin-top: 12px; }
+
+    button{
+      border:0;
+      cursor:pointer;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-weight: 900;
+      font-size: 16px;
+      box-shadow: 0 14px 28px rgba(43,10,26,.14);
+      transition: transform .08s ease;
+      touch-action: manipulation;
+    }
+    button:active{ transform: translateY(1px) scale(.99); }
+
+    .btnYes{ background: linear-gradient(135deg, #ff2e8a, #ff7bb8); color: white; }
+    .btnNo{ background: rgba(255,255,255,.75); border: 1px solid rgba(43,10,26,.12); color: var(--ink); }
+    .btnMaybe{ background: linear-gradient(135deg, rgba(255,255,255,.80), rgba(255,255,255,.55)); border: 1px solid rgba(43,10,26,.10); }
+
+    .callout{
+      display:inline-flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:center;
+      font-weight: 900;
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(43,10,26,.10);
+      padding: 10px 12px;
+      border-radius: 999px;
+      box-shadow: 0 14px 28px rgba(43,10,26,.12);
+      margin-top: 10px;
+      user-select:none;
+    }
+
+    /* Video + countdown */
+    .videoBox{
+      width:min(780px, 100%);
+      border-radius: 22px;
+      overflow:hidden;
+      border: 1px solid rgba(43,10,26,.12);
+      box-shadow: var(--shadow);
+      background: rgba(255,255,255,.65);
+    }
+
+    video{ width:100%; height:auto; display:block; background:black; }
+
+    .countdown{
+      display:grid;
+      gap: 10px;
+      justify-items:center;
+      margin-top: 12px;
+    }
+
+    .timeRow{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    .timeBox{
+      min-width: 110px;
+      padding: 12px 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(43,10,26,.10);
+      box-shadow: 0 14px 28px rgba(43,10,26,.12);
+      text-align:center;
+    }
+
+    .timeBox .num{ font-size: 28px; font-weight: 950; line-height: 1; }
+    .timeBox .lbl{ font-weight: 850; opacity:.8; margin-top: 4px; font-size: 12px; letter-spacing:.06em; text-transform:uppercase; }
+
+    .lockedWrap{ position:relative; }
+
+    .lockOverlay{
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      padding: 14px;
+      text-align:center;
+      font-weight: 950;
+      color: white;
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(6px);
+    }
+
+    .lockOverlay .small{ font-weight: 800; opacity:.95; margin-top: 8px; }
+
+    /* Modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      place-items:center;
+      padding: 16px;
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+
+    .modal.show{ display:grid; }
+
+    .modalCard{
+      width:min(520px, 100%);
+      background: rgba(255,255,255,.92);
+      border-radius: 22px;
+      border: 1px solid rgba(43,10,26,.12);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .modalTitle{ margin: 0; font-size: 20px; letter-spacing:-.02em; }
+    .modalText{ margin: 10px 0 0; line-height: 1.45; opacity:.9; white-space: pre-line; }
+    .modalBtn{
+      margin-top: 12px;
+      width:100%;
+      background: linear-gradient(135deg, #ff2e8a, #ff7bb8);
+      color:white;
+    }
+
+    @media (max-width: 390px){
+      .grid{ gap: 8px; }
+      .timeBox{ min-width: 96px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="floatLayer" id="floatLayer" aria-hidden="true"></div>
+
+  <main>
+    <!-- PAGE 1 -->
+    <section id="page1" aria-label="Intro">
+      <div class="card">
+        <h1 class="titleBig" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <span>BIG BACCKKKKK</span>
+          <img id="herSticker" alt="Her" src="" style="width:64px; height:64px; object-fit:cover; border-radius:18px; border:2px solid rgba(43,10,26,.15); box-shadow: 0 10px 24px rgba(43,10,26,.12); background: rgba(255,255,255,.55);" />
+        </h1>
+        
+        <p class="subBig">wassup G (on some nonchalant type shi)
+I hope you are doing well and I hope you are taking care of your tattoo also 😑</p>
+
+        <div class="scrollHint">
+          <div class="finger">👇🏽</div>
+          <div class="scrollText">Scroll down</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2 -->
+    <section id="page2" aria-label="Random flics">
+      <div class="card">
+        <h2 class="sectionTitle">Random flics</h2>
+        <p class="muted">Press each picture pleaseee.</p>
+
+        <div class="galleryWrap">
+          <div class="grid" id="grid">
+            <!-- 6 slots -->
+            <div class="slot" data-i="0">
+              <div class="slotOverlay">Tap to add
+                <small>pic / video</small>
+              </div>
+              <input type="file" accept="image/*,video/*" />
+            </div>
+            <div class="slot" data-i="1">
+              <div class="slotOverlay">Tap to add
+                <small>pic / video</small>
+              </div>
+              <input type="file" accept="image/*,video/*" />
+            </div>
+            <div class="slot" data-i="2">
+              <div class="slotOverlay">Tap to add
+                <small>pic / video</small>
+              </div>
+              <input type="file" accept="image/*,video/*" />
+            </div>
+            <div class="slot" data-i="3">
+              <div class="slotOverlay">Tap to add
+                <small>pic / video</small>
+              </div>
+              <input type="file" accept="image/*,video/*" />
+            </div>
+            <div class="slot" data-i="4">
+              <div class="slotOverlay">Tap to add
+                <small>pic / video</small>
+              </div>
+              <input type="file" accept="image/*,video/*" />
+            </div>
+            <div class="slot" data-i="5">
+              <div class="slotOverlay">Tap to add
+                <small>pic / video</small>
+              </div>
+              <input type="file" accept="image/*,video/*" />
+            </div>
+          </div>
+
+          <hr style="border:0; height:1px; background: rgba(43,10,26,.12); margin: 6px 0 2px;">
+
+          <h2 class="sectionTitle" style="margin-top: 6px;">Will you be my valentine? 👉🏾👈🏾</h2>
+
+          <div id="maybeStage">
+            <div class="btnRow">
+              <button class="btnMaybe" id="maybeBtn">Maybe 👀</button>
+            </div>
+          </div>
+
+          <div id="ynStage" style="display:none;">
+            <p class="muted" id="maybeText" style="font-weight:900;">
+              N*gga stop playing games  ware maybe?😑 Lets try this again
+            </p>
+            <div class="callout">⚠️ Press No and see what happens</div>
+            <div class="btnRow" id="btnArea" style="position:relative; min-height: 66px;">
+              <button class="btnYes" id="yesBtn">Yes 💗</button>
+              <button class="btnNo" id="noBtn">No 😅</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 3 -->
+    <section id="page3" aria-label="Video and countdown">
+      <div class="card">
+        <h2 class="sectionTitle">Okayyyyy 😌💗</h2>
+        <p class="muted">Watch the video then keep on scrolling down</p>
+      </div>
+
+      <div class="videoBox">
+       <iframe
+    id="yesVideo"
+    width="100%"
+    height="400"
+    src="https://www.youtube.com/embed/kgOFHsShbAI?autoplay=1&mute=1&playsinline=1"
+    frameborder="0"
+    allow="autoplay; encrypted-media; fullscreen"
+    allowfullscreen>
+  </iframe>
+      </div>
+
+      <div class="card" style="margin-top: 10px;">
+        <h2 class="sectionTitle" style="font-size: clamp(22px,5.5vw,30px);">Countdown to Feb 14 💘</h2>
+        <p class="muted" id="targetLine"></p>
+
+        <div class="countdown">
+          <div class="timeRow">
+            <div class="timeBox"><div class="num" id="hh">00</div><div class="lbl">hours</div></div>
+            <div class="timeBox"><div class="num" id="mm">00</div><div class="lbl">minutes</div></div>
+            <div class="timeBox"><div class="num" id="ss">00</div><div class="lbl">seconds</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="videoBox lockedWrap" style="margin-top: 10px;">
+        <iframe
+  id="lockedVideo"
+  width="100%"
+  height="400"
+  src="https://www.youtube.com/embed/8XNPCBnxARo"
+  frameborder="0"
+  allow="encrypted-media; fullscreen"
+  allowfullscreen>
+</iframe>
+
+        <div class="lockOverlay" id="lockOverlay">
+          <div>
+            🔒 Locked until the countdown hits 0
+            <div class="small">(then the video unlocks automatically)</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height: 26px"></div>
+    </section>
+  </main>
+
+  <!-- Modal for gallery captions -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="modalCard">
+      <h3 class="modalTitle" id="mTitle">Your text</h3>
+      <p class="modalText" id="mText"></p>
+      <button class="modalBtn" id="mClose">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    // ====== Background float items (hearts + pink flowers) ======
+    const floatLayer = $('floatLayer');
+    const FLOAT_EMOJIS = ['💗','💖','💘','💕','🌸','🌷','💞'];
+
+    function makeFloatItem(){
+      const el = document.createElement('div');
+      el.className = 'floatItem';
+      el.textContent = FLOAT_EMOJIS[Math.floor(Math.random()*FLOAT_EMOJIS.length)];
+
+      const x = Math.random()*100;
+      const y = 110 + Math.random()*40; // start below bottom
+      const s = 18 + Math.random()*28;
+      const t = 6 + Math.random()*8;
+
+      el.style.setProperty('--x', x + 'vw');
+      el.style.setProperty('--y', y + 'vh');
+      el.style.setProperty('--s', s + 'px');
+      el.style.setProperty('--t', t + 's');
+
+      floatLayer.appendChild(el);
+      setTimeout(() => el.remove(), (t*1000)+300);
+    }
+
+    // Keep it light for iPhone performance
+    setInterval(() => {
+      for(let i=0;i<2;i++) makeFloatItem();
+    }, 700);
+
+    // ====== Gallery setup ======
+    const slotImages = [
+  './mamani.png',
+  './EeSharpNigga.png',
+  './blushing.png',
+  './hanger.png',
+  './tongue.png',
+  './poutyface.png',
+];
+
+    // Edit these captions anytime (6 items, matching the 6 slots).
+    // ====== EDIT YOUR TEXT HERE (for each of the 6 gallery slots) ======
+// These 6 captions match the 6 slots in order (left→right, top row then bottom row).
+// Change them any time.
+const captions = [
+  '"Mamani" Big Back',
+  '"Ee Sharp Nigga" Big Back',
+  '"Blushinggg" Big Back',
+  '"Hanging Out" Big Back',
+  '"Lemme lick you" Big Back',
+  '"Poutyy face" Big Back',
+];
+
+   const slots = Array.from(document.querySelectorAll('.slot'));
+
+slots.forEach(slot => {
+  const i = Number(slot.dataset.i);
+
+  // ✅ Put the preset image into the slot
+  const imgPath = slotImages[i];
+  if (imgPath) {
+    const img = document.createElement('img');
+    img.src = imgPath;
+    img.className = 'slotMedia';
+    img.alt = 'memory';
+    slot.prepend(img);
+
+    const overlay = slot.querySelector('.slotOverlay');
+    if (overlay) overlay.style.display = 'none';
+  }
+
+  // ✅ Disable uploads completely (remove the hidden file input)
+  const input = slot.querySelector('input[type=file]');
+  if (input) input.remove();
+
+  // ✅ Tap slot to show caption
+  slot.addEventListener('click', () => {
+    showModal(`Slot ${i + 1}`, captions[i]);
+  });
+});
+
+
+    // ====== Valentine question logic ======
+    // Make NO impossible to click: dodge on hover/touch
+
+    $('maybeBtn').addEventListener('click', () => {
+      $('maybeStage').style.display = 'none';
+      $('ynStage').style.display = 'block';
+    });
+
+    // Make NO button impossible to click: it dodges her finger.
+// On iPhone there is no hover, so we dodge on touchstart/pointerdown.
+const noBtn = $('noBtn');
+const btnArea = $('btnArea');
+
+function dodgeNo(e){
+  // Prevent a click from registering
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  const pr = btnArea.getBoundingClientRect();
+  const br = noBtn.getBoundingClientRect();
+  const pad = 6;
+
+  // Keep within the button area
+  const maxX = Math.max(pad, pr.width - br.width - pad);
+  const maxY = Math.max(pad, pr.height - br.height - pad);
+
+  const x = pad + Math.random() * maxX;
+  const y = pad + Math.random() * maxY;
+
+  noBtn.style.position = 'absolute';
+  noBtn.style.left = x + 'px';
+  noBtn.style.top = y + 'px';
+}
+
+// Dodge on approaches / taps
+noBtn.addEventListener('pointerenter', dodgeNo);
+noBtn.addEventListener('pointerdown', dodgeNo);
+noBtn.addEventListener('touchstart', dodgeNo, { passive: false });
+
+// If Safari still triggers a click, dodge again.
+noBtn.addEventListener('click', (e) => dodgeNo(e));
+
+$('yesBtn').addEventListener('click', () => {
+  document.querySelector('#page3').scrollIntoView({ behavior: 'smooth' });
+});
+
+    // ====== Countdown to Feb 14 at 00:00 in Gaborone, Botswana (UTC+02:00, year-round) ======
+// Botswana time zone: Africa/Gaborone (no DST). We'll use a fixed +02:00 offset.
+const GABS_OFFSET_MS = 2 * 60 * 60 * 1000;
+
+function nextFeb14GaboroneUtc(){
+  const nowUtc = Date.now();
+  const nowYear = new Date(nowUtc).getUTCFullYear();
+
+  // Feb 14 00:00 in Gaborone, represented as a UTC instant:
+  // UTC = local - 2 hours.
+  let targetUtc = Date.UTC(nowYear, 1, 14, 0, 0, 0) - GABS_OFFSET_MS;
+
+  if (nowUtc > targetUtc){
+    targetUtc = Date.UTC(nowYear + 1, 1, 14, 0, 0, 0) - GABS_OFFSET_MS;
+  }
+  return targetUtc;
+}
+
+const targetUtcMs = nextFeb14GaboroneUtc();
+const targetLocalInGabs = new Date(targetUtcMs + GABS_OFFSET_MS);
+$('targetLine').textContent = `Target (Gaborone): ${targetLocalInGabs.toLocaleString(undefined, { weekday:'short', year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' })} (00:00)`;
+
+function pad2(n){ return String(n).padStart(2,'0'); }
+
+function tick(){
+  const nowUtc = Date.now();
+  let diff = targetUtcMs - nowUtc;
+
+  if (diff <= 0){
+    // unlock
+    $('hh').textContent = '00';
+    $('mm').textContent = '00';
+    $('ss').textContent = '00';
+    unlockVideo();
+    return;
+  }
+
+  const totalSeconds = Math.floor(diff / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  $('hh').textContent = pad2(hours);
+  $('mm').textContent = pad2(minutes);
+  $('ss').textContent = pad2(seconds);
+}
+
+let unlocked = false;
+function unlockVideo(){
+  if (unlocked) return;
+  unlocked = true;
+
+  // Remove the lock overlay so she can press play
+  $('lockOverlay').style.display = 'none';
+}
+
+
+
+
+tick();
+setInterval(tick, 1000);
+
+    // ====== Modal helpers ======
+    const modal = $('modal');
+    function showModal(title, text){
+      $('mTitle').textContent = title;
+      $('mText').textContent = text;
+      modal.classList.add('show');
+    }
+    $('mClose').addEventListener('click', () => modal.classList.remove('show'));
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('show');
+    });
+
+    // ====== IMPORTANT: add your picture + video sources ======
+// 1) Her sticker/picture next to BIG BACCKKKKK:
+// Put a direct image URL here (ends in .jpg/.png/.webp). If left blank, the sticker stays hidden.
+
+
+// 2) Videos:
+// Put direct .mp4 links here.
+const HER_STICKER_URL = './her.png';
+
+(function applySticker(){
+  if (HER_STICKER_URL){
+    $('herSticker').src = HER_STICKER_URL;
+    $('herSticker').style.display = 'block';
+  } else {
+    $('herSticker').style.display = 'none';
+  }
+})();
+
+
+    // Replace these with hosted mp4 links (or keep blank while designing):
+    // $('yesVideo').querySelector('source').src = 'https://your-host/yes-video.mp4'
+    // $('lockedVideo').querySelector('source').src = 'https://your-host/locked-video.mp4'
+    // Then call: $('yesVideo').load(); $('lockedVideo').load();
+  </script>
+</body>
+</html>
