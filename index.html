@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Valentine Invite 💗</title>
@@ -605,67 +607,50 @@ $('yesBtn').addEventListener('click', () => {
   document.querySelector('#page3').scrollIntoView({ behavior: 'smooth' });
 });
 
-    // ====== Countdown to Feb 14 at 00:00 in Gaborone, Botswana (UTC+02:00, year-round) ======
-// Botswana time zone: Africa/Gaborone (no DST). We'll use a fixed +02:00 offset.
-const GABS_OFFSET_MS = 2 * 60 * 60 * 1000;
+// ====== Instant Unlock Mode (No Countdown) ======
 
-function nextFeb14GaboroneUtc(){
-  const nowUtc = Date.now();
-  const nowYear = new Date(nowUtc).getUTCFullYear();
-
-  // Feb 14 00:00 in Gaborone, represented as a UTC instant:
-  // UTC = local - 2 hours.
-  let targetUtc = Date.UTC(nowYear, 1, 14, 0, 0, 0) - GABS_OFFSET_MS;
-
-  if (nowUtc > targetUtc){
-    targetUtc = Date.UTC(nowYear + 1, 1, 14, 0, 0, 0) - GABS_OFFSET_MS;
-  }
-  return targetUtc;
-}
-
-const targetUtcMs = nextFeb14GaboroneUtc();
-const targetLocalInGabs = new Date(targetUtcMs + GABS_OFFSET_MS);
-$('targetLine').textContent = `Target (Gaborone): ${targetLocalInGabs.toLocaleString(undefined, { weekday:'short', year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' })} (00:00)`;
-
-function pad2(n){ return String(n).padStart(2,'0'); }
-
-function tick(){
-  const nowUtc = Date.now();
-  let diff = targetUtcMs - nowUtc;
-
-  if (diff <= 0){
-    // unlock
-    $('hh').textContent = '00';
-    $('mm').textContent = '00';
-    $('ss').textContent = '00';
-    unlockVideo();
-    return;
-  }
-
-  const totalSeconds = Math.floor(diff / 1000);
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-
-  $('hh').textContent = pad2(hours);
-  $('mm').textContent = pad2(minutes);
-  $('ss').textContent = pad2(seconds);
-}
+$('hh').textContent = '00';
+$('mm').textContent = '00';
+$('ss').textContent = '00';
 
 let unlocked = false;
 function unlockVideo(){
   if (unlocked) return;
   unlocked = true;
 
-  // Remove the lock overlay so she can press play
   $('lockOverlay').style.display = 'none';
+
+  // 🎉 Pink confetti burst
+  if (window.confetti) {
+    const duration = 2500;
+    const end = Date.now() + duration;
+
+    (function frame(){
+      confetti({
+        particleCount: 6,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: ['#ff69b4','#ff1493','#ffc0cb']
+      });
+      confetti({
+        particleCount: 6,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: ['#ff69b4','#ff1493','#ffc0cb']
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
+  }
 }
 
+// Unlock immediately
+unlockVideo();
 
-
-
-tick();
-setInterval(tick, 1000);
 
     // ====== Modal helpers ======
     const modal = $('modal');
@@ -705,5 +690,6 @@ const HER_STICKER_URL = './her.PNG';
   </script>
 </body>
 </html>
+
 
 
